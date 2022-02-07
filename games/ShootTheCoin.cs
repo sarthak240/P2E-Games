@@ -1,6 +1,6 @@
 // MIT License
 
-// Copyright (c) 2022 supra08
+// Copyright (c) 2022 sarthak240
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,19 +31,19 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 using Unity.Transforms;
 
-public class Shooting : MiniGameBase
+public class ShootTheCoin : MiniGameBase
 {
     List<Tuple<string, string>> bullets = new List<Tuple<string, string>>();
-    List<Tuple<string, string>> obstacles = new List<Tuple<string, string>>();
+    List<Tuple<string, string>> coins = new List<Tuple<string, string>>();
 
     string bulletAsset = "";
     string bulletBundle = "";
 
-    public Shooting(Dictionary<string, object> gameAssetInput) : base(gameAssetInput)
+    public ShootTheCoin(Dictionary<string, object> gameAssetInput) : base(gameAssetInput)
     {
         foreach (var gameAsset in gameAssetInput)
         {
-            if (gameAsset.Key.Contains("obstacle")) obstacles.Add((Tuple<string, string>)(gameAsset.Value));
+            if (gameAsset.Key.Contains("coin")) coins.Add((Tuple<string, string>)(gameAsset.Value));
             if (gameAsset.Key.Contains("bullet"))
             {
                 var t = (Tuple<string, string>)(gameAsset.Value);
@@ -81,12 +81,12 @@ public class Shooting : MiniGameBase
         short id = 0;
         foreach (Vector3 assetPosition in assetPlaceholders)
         {
-            if (obstacles.Count > 0)
+            if (coins.Count > 0)
             {
-                var obstacleTup = obstacles[UnityEngine.Random.Range(0, obstacles.Count)];
-                var temp = AddEntity(id, obstacleTup.Item1, obstacleTup.Item2, assetPosition, new float3(1, 1, 1), false);
+                var coinTup = coins[UnityEngine.Random.Range(0, coins.Count)];
+                var temp = AddEntity(id, coinTup.Item1, coinTup.Item2, assetPosition, new float3(1, 1, 1), false);
                 id++;
-                assetHashtable.Add(temp.key, JsonUtility.ToJson(new PhotonSmartObjectDetails(smartObjects[temp.key], obstacleTup.Item2, obstacleTup.Item1, assetPosition, temp.rotation)));
+                assetHashtable.Add(temp.key, JsonUtility.ToJson(new PhotonSmartObjectDetails(smartObjects[temp.key], coinTup.Item2, coinTup.Item1, assetPosition, temp.rotation)));
             }
         }
 
